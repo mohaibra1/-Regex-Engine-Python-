@@ -1,4 +1,4 @@
-import sys
+import sys, re
 sys.setrecursionlimit(10000)
 index = 0
 def regex(reg): # write your code here
@@ -114,5 +114,14 @@ def process_regex(reg):
     reg = first + '|' + second
     return str_reg, reg
 
+def faster_regex_search(reg):
+    s_input, r_input = reg.split('|')
+    processed = re.search(s_input, r_input)
+
+    if processed:
+        return True
+    else:
+        return False
+
 regex_input = input()
-print(search_regex_pattern(regex_input))
+print(faster_regex_search(regex_input))
