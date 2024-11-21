@@ -26,7 +26,6 @@ def regex_search(reg):
         return regex(reg)
     skip = 1
     r_input, s_input = reg.split('|')
-
     if len(r_input) != len(s_input):
         tmp = []
         if len(r_input) == 0:
@@ -41,6 +40,40 @@ def regex_search(reg):
         return processed
     else:
         return process_search_regex(r_input, s_input)
+
+def search_regex_pattern(reg):
+    if '^' in reg and '$' in reg:
+        s, t = reg.split('|')
+        dex2 = s.index('$')
+        a = s[1:dex2]
+        t = t.replace(' ', '')
+        str_reg = f"{a}|{t[:len(a)]}"
+        tmp2 = regex_search(str_reg)
+        tmp = False
+        if tmp2:
+            str_reg = f"{a}|{t[-len(a):]}"
+            tmp = regex_search(str_reg)
+
+        if tmp and tmp2:
+            return True
+        else:
+            return False
+    elif '$' in reg:
+        s, t = reg.split('|')
+        dex = s.index('$')
+        #t = t.replace(' ', '')
+        #s = s.replace('$', '')
+
+        str_reg = s[:dex] + '|' + t[-len(s):]
+        #str_reg = str_reg.replace("'", '')
+        return regex_search(str_reg)
+    elif '^' in reg:
+        s, t = reg.split('|')
+
+        str_reg = s[1:] + '|' + t[:len(s)]
+        return regex_search(str_reg)
+    else:
+        return regex_search(reg)
 
 def process_search_regex(reg, tmp):
     global index
@@ -82,4 +115,4 @@ def process_regex(reg):
     return str_reg, reg
 
 regex_input = input()
-print(regex_search(regex_input))
+print(search_regex_pattern(regex_input))
